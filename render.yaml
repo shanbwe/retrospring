@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: retrospring
+    env: ruby
+    buildCommand: |
+      apt-get update
+      apt-get install -y libidn11-dev
+      bundle install
+      yarn install
+      bundle exec rake db:migrate
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
