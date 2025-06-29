@@ -1,6 +1,5 @@
 FROM ruby:3.2
 
-# Install dependencies including nodejs and yarn
 RUN apt-get update -qq && \
     apt-get install -y build-essential libpq-dev nodejs curl && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -11,12 +10,13 @@ WORKDIR /app
 
 COPY . .
 
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+ENV DATABASE_URL=postgres://invalid
+
 RUN bundle install
 RUN yarn install
 RUN bundle exec rake assets:precompile
-
-ENV RAILS_ENV=production
-ENV RACK_ENV=production
 
 RUN bundle exec rake db:migrate
 
